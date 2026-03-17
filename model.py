@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
-df = pd.read_csv("marketing_data.csv")
+df = pd.read_csv("data/marketing_data.csv")
 
 X = df[["age","income","previous_purchases","website_visits"]]
 y = df["response"]

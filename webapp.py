@@ -2,30 +2,42 @@ import streamlit as st
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
-st.title("Marketing Campaign Predictor")
+# Title
+st.title("📊 Marketing Campaign Analysis App")
 
-df = pd.read_csv("marketing_data.csv")
+# Load Data
+df = pd.read_csv("data/marketing_data.csv")
 
-X = df[["age","income","previous_purchases"]]
+# Show Data
+st.subheader("Dataset Preview")
+st.dataframe(df)
+
+# Charts
+st.subheader("Response Distribution")
+st.bar_chart(df["response"].value_counts())
+
+st.subheader("Income Distribution")
+st.line_chart(df["income"])
+
+# Model Training
+X = df[["age","income","previous_purchases","website_visits"]]
 y = df["response"]
 
-model = LogisticRegression()
-model.fit(X,y)
+model = LogisticRegression(max_iter=1000)
+model.fit(X, y)
 
-st.header("Enter Customer Information")
+# User Input
+st.header("🔮 Predict Customer Response")
 
-age = st.slider("Age",18,70)
-income = st.slider("Income",20000,100000)
-purchases = st.slider("Previous Purchases",0,10)
+age = st.slider("Age", 18, 70, 30)
+income = st.slider("Income", 20000, 100000, 50000)
+purchases = st.slider("Previous Purchases", 0, 10, 2)
+visits = st.slider("Website Visits", 0, 20, 5)
 
-prediction = model.predict([[age,income,purchases]])
+# Prediction
+prediction = model.predict([[age, income, purchases, visits]])
 
 if prediction[0] == 1:
-    st.success("Customer likely to respond to campaign")
+    st.success("✅ Customer is likely to respond")
 else:
-    st.error("Customer unlikely to respond")
-    st.subheader("Dataset Overview")
-
-st.write(df)
-
-st.bar_chart(df["previous_purchases"])
+    st.error("❌ Customer is unlikely to respond")
